@@ -43,6 +43,7 @@ export const BodyTest = () => {
     if (diff > 0 && diff < 1) {
       setIsTimeout(() => true);
       setFinishStep(() => true);
+      dispatch(addFinishStep(true));
       if (questions.length > questionNumber + 1) {
         for (let i = 0; i < questions.length; i++) {
           if (questionNumber < i) {
