@@ -29,9 +29,7 @@ export const BodyTest = () => {
   const [questionNumber, setQuestionNumber] = useState<number>(
     parseStorage().numberQuetion
   );
-  const [finishStep, setFinishStep] = useState<boolean>(
-    parseStorage().numberQuetion
-  );
+  const [finishStep, setFinishStep] = useState<boolean>(false);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -56,6 +54,7 @@ export const BodyTest = () => {
 
   useEffect(() => {
     setStep1(() => parseStorage().step);
+    setFinishStep(() => parseStorage().finishStep);
   }, []);
 
   useEffect(() => {
