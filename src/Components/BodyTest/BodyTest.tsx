@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Question } from "../Question/Question";
 import styles from "./styles.module.css";
 import { questions, testTime } from "../../Constants/Constants";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addStep,
   addTimer,
@@ -14,18 +14,24 @@ import { Start } from "../Start/Start";
 import { Finish } from "../Finish/Finish";
 
 const parseStorage = () => {
-  const rootValue = JSON.parse(localStorage.getItem("persist:root") || "");
-  const answerValue = JSON.parse(rootValue.answera || "");
-  return answerValue;
+  const rootValue = localStorage.getItem("persist:root") || "";
+  if (rootValue) {
+    const parsedRootValue = JSON.parse(rootValue);
+    const answerValue = JSON.parse(parsedRootValue.answera || "");
+    return answerValue;
+  } else {
+    return "";
+  }
 };
-
 export const BodyTest = () => {
   const [finishTime, setFinishTime] = useState(parseStorage().timer);
   const [[diffM, diffS], setDiff] = useState([0, 0]);
   const [tick, setTick] = useState(false);
   const [isTimeout, setIsTimeout] = useState(false);
   const [timerId, setTimerID] = useState<NodeJS.Timer | number>(0);
-  const [step1, setStep1] = useState(true);
+  const [step1, setStep1] = useState(
+    parseStorage().timer ? parseStorage().step : true
+  );
   const [questionNumber, setQuestionNumber] = useState<number>(
     parseStorage().numberQuetion
   );
@@ -51,11 +57,6 @@ export const BodyTest = () => {
   useEffect(() => {
     if (isTimeout) clearInterval(timerId);
   }, [isTimeout, timerId]);
-
-  useEffect(() => {
-    setStep1(() => parseStorage().step);
-    setFinishStep(() => parseStorage().finishStep);
-  }, []);
 
   useEffect(() => {
     const timerID = setInterval(() => {
@@ -102,10 +103,10 @@ export const BodyTest = () => {
 
   return (
     <div className={styles.test}>
-      {step1 && !finishStep && (
+      {step1 === true && !finishStep && (
         <Start totalTime={testTime.totalTime} onClickStart={onClickStart} />
       )}
-      {!step1 && !finishStep && (
+      {step1 === false && !finishStep && (
         <>
           <div className={styles.test__header}>
             <h1 className={styles.test__name}>Тестирование</h1>
@@ -116,9 +117,19 @@ export const BodyTest = () => {
             <Question
               numberAns={questionNumber}
               onClickAnswer={onClickAnswer}
-              question={questions[questionNumber].question}
-              options={questions[questionNumber].options}
-              type={questions[questionNumber].type}
+              question={
+                questions[questionNumber]
+                  ? questions[questionNumber].question
+                  : ""
+              }
+              options={
+                questions[questionNumber]
+                  ? questions[questionNumber].options
+                  : []
+              }
+              type={
+                questions[questionNumber] ? questions[questionNumber].type : ""
+              }
             />
           </div>
         </>

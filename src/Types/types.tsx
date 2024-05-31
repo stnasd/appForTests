@@ -1,6 +1,6 @@
 export type mockQuestions = {
   type: string;
-  options: string[] | [];
+  options: string[];
   question: string;
   answer: string[];
 };
