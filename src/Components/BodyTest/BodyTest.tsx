@@ -25,7 +25,7 @@ export const BodyTest = () => {
   const [tick, setTick] = useState(false);
   const [isTimeout, setIsTimeout] = useState(false);
   const [timerId, setTimerID] = useState<NodeJS.Timer | number>(0);
-  const [step1, setStep1] = useState(parseStorage().step);
+  const [step1, setStep1] = useState(true);
   const [questionNumber, setQuestionNumber] = useState<number>(
     parseStorage().numberQuetion
   );
@@ -53,6 +53,10 @@ export const BodyTest = () => {
   useEffect(() => {
     if (isTimeout) clearInterval(timerId);
   }, [isTimeout, timerId]);
+
+  useEffect(() => {
+    setStep1(() => parseStorage().step);
+  }, []);
 
   useEffect(() => {
     const timerID = setInterval(() => {
@@ -120,7 +124,7 @@ export const BodyTest = () => {
           </div>
         </>
       )}
-      {finishStep && <Finish />}
+      {finishStep ? <Finish /> : null}
     </div>
   );
 };
