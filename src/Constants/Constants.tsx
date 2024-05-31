@@ -72,4 +72,4 @@ export const questions: mockQuestions[] = [
   },
 ];
 
-export const testTime: mockTestTime = { totalTime: 2 };
+export const testTime: mockTestTime = { totalTime: 20 };
