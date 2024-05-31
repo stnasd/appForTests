@@ -35,7 +35,9 @@ export const BodyTest = () => {
   const [questionNumber, setQuestionNumber] = useState<number>(
     parseStorage().numberQuetion
   );
-  const [finishStep, setFinishStep] = useState<boolean>(false);
+  const [finishStep, setFinishStep] = useState<boolean>(
+    parseStorage().finishStep ? parseStorage().finishStep : false
+  );
 
   const dispatch = useDispatch();
   useEffect(() => {
